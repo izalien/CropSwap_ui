@@ -1,15 +1,53 @@
 import { Button, Text, View } from "react-native";
 import Modal from "react-native-modal"
-import React, { useState } from "react";
-import { TextInput } from "react-native-gesture-handler";
+import React, { useEffect, useState } from "react";
+import { FlatList, TextInput } from "react-native-gesture-handler";
 import { Dropdown } from "react-native-element-dropdown";
+import axios from "axios";
 
 export default function MyFields() {
   const [modalVisible, setModalVisible] = useState(false);
+  const [fields, setFields] = useState(new Array<Field>());
+
+  useEffect(() => {
+    // fetch fields from API
+    const getAllFields = async () => {
+      try {
+        const response = await axios.get('http://localhost:3000/fields/getAll');
+        setFields(response.data.data.fields);
+        console.log(response.data.data.fields);
+        console.log("length", response.data.data.fields.length);
+      }
+      catch (error) {
+        console.error(error);
+      }
+    }
+    getAllFields();
+  }, []);
 
   return (
     <View className="h-full p-10 bg bg-amber-900/75 flex items-center">
       <Text className="color-amber-50 text-7xl m-5 font-serif">My Fields</Text>
+      {fields.length === 0 ? (
+        <Text className="color-amber-100 text-3xl">No fields found.</Text>
+      ) : (
+      <FlatList
+        data={fields}
+        renderItem={({item}) => (
+          <View className="bg-amber-100 p-5 m-5 rounded-xl">
+            <Text className="color-amber-900 text-3xl font-serif">{item.name}</Text>
+            <Text className="color-amber-900 text-xl font-serif">Size: {item.size} acres</Text>
+            <Text className="color-amber-900 text-xl font-serif">Location: {item.location}</Text>
+            <Text className="color-amber-900 text-xl font-serif">Crop: {item.crop}</Text>
+          </View>
+        )}
+        keyExtractor={(item) => item.id.toString()}
+      />)}
+      <View className="bg-amber-100 absolute inset-x-0 bottom-0 p-5 items-center">
+        <View className="w-40">
+          <Button title="Add Field" onPress={() => {setModalVisible(true)}} color={'#78350f'}/>
+        </View>
+      </View>
       <Modal 
         isVisible={modalVisible}
         animationIn="slideInUp"
@@ -46,11 +84,6 @@ export default function MyFields() {
           </View>
         </View>
       </Modal>
-      <View className="bg-amber-100 absolute inset-x-0 bottom-0 p-5 items-center">
-        <View className="w-40">
-          <Button title="Add Field" onPress={() => {setModalVisible(true)}} color={'#78350f'}/>
-        </View>
-      </View>
     </View>
   );
 }
