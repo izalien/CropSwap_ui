@@ -12,14 +12,14 @@ export default function Index() {
           <Text className="text-amber-100 text-5xl m-5 font-serif">manage your crops' past, present, and future</Text>
         </View>
         <View className="flex-row w-full justify-center">
-          <TouchableOpacity className="bg-amber-100 backdrop-blur-sm p-10 w-1/5 m-20 border-amber-900 border-4 items-center rounded-xl">
-            <Text className="color-amber-900 text-2xl font-semibold">Crop History</Text>
+          <TouchableOpacity className="bg-amber-900/75 backdrop-blur-sm p-10 w-1/5 m-20 items-center rounded-xl">
+            <Text className="color-amber-100 text-2xl font-semibold">Crop History</Text>
           </TouchableOpacity>
-          <TouchableOpacity className="bg-amber-100 backdrop-blur-sm p-10 w-1/5 m-20 border-amber-900 border-4 items-center rounded-xl" onPress={() => navigation.navigate("myFields")}>
-            <Text className="color-amber-900 text-2xl font-semibold">My Fields</Text>
+          <TouchableOpacity className="bg-amber-900/75 backdrop-blur-sm p-10 w-1/5 m-20 items-center rounded-xl" onPress={() => navigation.navigate("myFields")}>
+            <Text className="color-amber-100 text-2xl font-semibold">Current Fields</Text>
           </TouchableOpacity>
-          <TouchableOpacity className="bg-amber-100 backdrop-blur-sm p-10 w-1/5 m-20 border-amber-900 border-4 items-center rounded-xl">
-            <Text className="color-amber-900 text-2xl font-semibold">Crop Planning</Text>
+          <TouchableOpacity className="bg-amber-900/75 backdrop-blur-sm p-10 w-1/5 m-20 items-center rounded-xl">
+            <Text className="color-amber-100 text-2xl font-semibold">Crop Planning</Text>
           </TouchableOpacity>
         </View>
       </View>
