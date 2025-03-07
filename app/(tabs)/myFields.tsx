@@ -1,4 +1,5 @@
-import { Button, Text, View, CheckBox } from "react-native";
+import { Button, Text, View } from "react-native";
+import { CheckBox } from 'react-native-elements'
 import Modal from "react-native-modal"
 import React, { useEffect, useState } from "react";
 import { FlatList, TextInput } from "react-native-gesture-handler";
@@ -7,12 +8,36 @@ import axios from "axios";
 
 export default function MyFields() {
   const [grows, setGrows] = useState(new Array<Grow>());
+  const [checkedFields, setCheckedFields] = useState(new Array<boolean>());
   
   const getAllCurrentGrows = async () => {
     // fetch grows from API
     try {
       const response = await axios.get('http://localhost:3000/api/grows/getAllCurrent', { params: { year } });
       setGrows(response.data.data.grows);
+      setCheckedFields(new Array(response.data.data.grows.length).fill(false));
+    }
+    catch (error) {
+      console.error(error);
+    }
+  }
+  
+  const toggleCheckbox = (index: number) => {
+    const updatedCheckedFields = [...checkedFields];
+    updatedCheckedFields[index] = !checkedFields[index];
+    setCheckedFields(updatedCheckedFields);
+  }
+
+  const removeFields = async () => {
+    let growsToRemove = new Array();
+    for (let i = 0; i < checkedFields.length; i++) {
+      growsToRemove = checkedFields[i] === true ? [...growsToRemove, grows[i]._id] : growsToRemove;
+    }
+    // send grows to remove to API
+    try {
+      await axios.post('http://localhost:3000/api/grows/remove', growsToRemove);
+      getAllCurrentGrows();
+      setShowRemove(false);
     }
     catch (error) {
       console.error(error);
@@ -116,13 +141,13 @@ export default function MyFields() {
     setExistingFieldModalVisible(false);
   }
 
+  const [showRemove, setShowRemove] = useState(false);
   const [crops, setCrops] = useState(new Array<Crop>());
   
   useEffect(() => {
     const getAllCrops = async () => {
       try {
         const response = await axios.get('http://localhost:3000/api/crops/getAll');
-        console.log(response.data.data.crops);
         setCrops([{id: null, name: "none"}, ...response.data.data.crops]);
       }
       catch (error) {
@@ -138,20 +163,30 @@ export default function MyFields() {
   return (
     <View className="h-full p-10 bg bg-amber-900/75 flex items-center">
       <Text className="color-amber-50 text-7xl m-5 font-serif">{year} Fields</Text>
+      {showRemove && 
+        <Text className="color-amber-100 text-3xl">Select fields for removal</Text>
+      }
       {grows.length === 0 ? (
         <Text className="color-amber-100 text-3xl">No fields found.</Text>
       ) : (
       <FlatList
         numColumns={3}
         data={grows}
-        renderItem={({item}) => (
+        renderItem={({item, index}) => (
           <View className="bg-amber-100 p-5 m-5 rounded-xl">
             <View className="flex-row items-center">
-              <CheckBox
-                value={true}
-                onValueChange={() => {}}
-                style={{ transform: [{ scale: 1.5 }], marginRight: 10, marginBottom: 8 }}
-              />
+              {showRemove && 
+                <CheckBox
+                  checked={checkedFields[index]}
+                  onPress={() => {toggleCheckbox(index)}}
+                  iconType="material-community"
+                  checkedIcon="checkbox-marked"
+                  uncheckedIcon="checkbox-blank-outline"
+                  checkedColor='#3c6300'
+                  size={32}
+                  containerStyle={{padding: 0, marginTop: 0, marginLeft: 0, marginRight: 0, paddingBottom: 3}}
+                />
+              }
               <Text className="color-amber-950 text-3xl font-serif font-semibold mb-2">{item.field.name.toUpperCase()}</Text>
             </View>
             <View className="flex-row w-full justify-between">
@@ -170,17 +205,28 @@ export default function MyFields() {
         )}
         keyExtractor={(item) => item.id}
       />)}
-      <View className="bg-amber-100 absolute inset-x-0 bottom-0 p-5 flex-row justify-center">
-        <View className="w-40 mx-5">
-          <Button title="Add Existing Field" onPress={() => {getAllNonCurrentFields()}} color={'#78350f'}/>
+      {showRemove ?  
+        <View className="bg-amber-100 absolute inset-x-0 bottom-0 p-5 flex-row justify-center">
+          <View className="mx-5">
+            <Button title="Remove Selected" onPress={() => {removeFields()}} color={'#3c6300'}/>
+          </View>
+          <View className="mx-5">
+            <Button title="Cancel" onPress={() => {setShowRemove(false)}} color={'#9f0712'}/>
+          </View>
         </View>
-        <View className="w-40 mx-5">
-          <Button title="Add New Field" onPress={() => {setNewFieldModalVisible(true)}} color={'#78350f'}/>
+        :
+        <View className="bg-amber-100 absolute inset-x-0 bottom-0 p-5 flex-row justify-center">
+          <View className="w-40 mx-5">
+            <Button title="Add Existing Field" onPress={() => {getAllNonCurrentFields()}} color={'#78350f'}/>
+          </View>
+          <View className="w-40 mx-5">
+            <Button title="Add New Field" onPress={() => {setNewFieldModalVisible(true)}} color={'#78350f'}/>
+          </View>
+          <View className="w-40 mx-5">
+            <Button title="Remove Field" onPress={() => {setShowRemove(true)}} color={'#78350f'}/>
+          </View>
         </View>
-        <View className="w-40 mx-5">
-          <Button title="Remove Field" onPress={() => {}} color={'#78350f'}/>
-        </View>
-      </View>
+      }
       <Modal 
         isVisible={newFieldModalVisible}
         animationIn="slideInUp"

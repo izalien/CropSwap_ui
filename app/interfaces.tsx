@@ -12,7 +12,7 @@ interface Crop {
 }
 
 interface Grow {
-    id: string;
+    _id: string;
     season: number;
     field: Field;
     crop: Crop;
