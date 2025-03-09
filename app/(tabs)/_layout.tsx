@@ -25,7 +25,7 @@ export default function TabLayout() {
       <Tab.Screen
         name="myFields"
         component={MyFields}
-        options={{ tabBarLabel: 'Current Fields' }}
+        options={{ tabBarLabel: 'My Fields' }}
       />
     </Tab.Navigator>
   );

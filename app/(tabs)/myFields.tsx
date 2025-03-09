@@ -1,4 +1,4 @@
-import { Button, Text, View } from "react-native";
+import { ActivityIndicator, Button, Text, View } from "react-native";
 import { CheckBox } from 'react-native-elements'
 import Modal from "react-native-modal"
 import React, { useEffect, useState } from "react";
@@ -9,11 +9,15 @@ import axios from "axios";
 export default function MyFields() {
   const [grows, setGrows] = useState(new Array<Grow>());
   const [checkedFields, setCheckedFields] = useState(new Array<boolean>());
+  const [year, setYear] = useState(Number);
   
   const getAllCurrentGrows = async () => {
     // fetch grows from API
     try {
-      const response = await axios.get('http://localhost:3000/api/grows/getAllCurrent', { params: { year } });
+      const season = year || new Date().getFullYear(); 
+      const response = await axios.get('http://localhost:3000/api/grows/getAllCurrent', 
+        { params: { "season": season } }
+      );
       setGrows(response.data.data.grows);
       setCheckedFields(new Array(response.data.data.grows.length).fill(false));
     }
@@ -73,7 +77,6 @@ export default function MyFields() {
     setFieldCrop({});
   }
 
-  const [year, setYear] = useState(Number);
   const [selectedField, setSelectedField] = useState<Field>();
 
   const submitNewField = async () => {
@@ -143,8 +146,12 @@ export default function MyFields() {
 
   const [showRemove, setShowRemove] = useState(false);
   const [crops, setCrops] = useState(new Array<Crop>());
+  const [loading, setLoading] = useState(true);
+  const [years, setYears] = useState(new Array());
   
   useEffect(() => {
+    if (year === 0) setYear(new Date().getFullYear());
+
     const getAllCrops = async () => {
       try {
         const response = await axios.get('http://localhost:3000/api/crops/getAll');
@@ -154,20 +161,39 @@ export default function MyFields() {
         console.error(error);
       }
     }
+
+    const getYears = () => {
+      const currentYear = year || new Date().getFullYear();
+      const tempYears = Array.from({ length: currentYear - 1900 + 1 }, (_, index) => ({
+        "value": currentYear - index
+      }));
+      setYears(tempYears);
+    }
+
+    getYears();
     getAllFields();
-    setYear(new Date().getFullYear());
     getAllCurrentGrows();
     getAllCrops();
+    setLoading(false);
   }, []);
+
+  useEffect(() => {
+    setLoading(true);
+    getAllCurrentGrows().then(() => setLoading(false));
+  }, [year]);
 
   return (
     <View className="h-full p-10 bg bg-amber-900/75 flex items-center">
       <Text className="color-amber-50 text-7xl m-5 font-serif">{year} Fields</Text>
+      <View className="flex-row items-center">
+        <Text className="color-amber-100 text-xl m-3">Select year:</Text>
+        <Dropdown value={year} labelField={"value"} valueField={"value"} data={years} style={{ borderColor: '#78350f', borderWidth: 2, padding: 8, borderRadius: 6, backgroundColor: '#fffbeb'}} itemTextStyle={{fontSize: 14}} selectedTextStyle={{fontSize: 14}} onChange={event => setYear(event.value)}/>   
+      </View>
       {showRemove && 
-        <Text className="color-amber-100 text-3xl">Select fields for removal</Text>
+        <Text className="color-amber-50 text-3xl">Select fields for removal</Text>
       }
       {grows.length === 0 ? (
-        <Text className="color-amber-100 text-3xl">No fields found.</Text>
+        <Text className="color-amber-50 text-3xl">No fields found.</Text>
       ) : (
       <FlatList
         numColumns={3}
@@ -203,7 +229,7 @@ export default function MyFields() {
             </View>
           </View>
         )}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item._id}
       />)}
       {showRemove ?  
         <View className="bg-amber-100 absolute inset-x-0 bottom-0 p-5 flex-row justify-center">
@@ -297,6 +323,16 @@ export default function MyFields() {
               </View>
             </View>
           </View>
+        </View>
+      </Modal>
+      <Modal 
+        isVisible={loading}
+        animationIn="slideInUp"
+        backdropColor={'#78350f'}
+        backdropOpacity={0.50}
+      >
+        <View className="flex place-content-center h-screen items-center">
+          <ActivityIndicator size="large" color="#fef3c6" />
         </View>
       </Modal>
     </View>
