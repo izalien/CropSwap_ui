@@ -1,10 +1,12 @@
-import { ActivityIndicator, Button, Text, View } from "react-native";
+import { Button, Text, View } from "react-native";
 import { CheckBox } from 'react-native-elements'
 import Modal from "react-native-modal"
 import React, { useEffect, useState } from "react";
 import { FlatList, TextInput } from "react-native-gesture-handler";
 import { Dropdown } from "react-native-element-dropdown";
 import axios from "axios";
+import { getCrops } from "../utils/crops";
+import LoadingModal from "../components/LoadingModal";
 
 export default function MyFields() {
   const [grows, setGrows] = useState(new Array<Grow>());
@@ -150,17 +152,9 @@ export default function MyFields() {
   const [years, setYears] = useState(new Array());
   
   useEffect(() => {
-    if (year === 0) setYear(new Date().getFullYear());
+    getCrops().then((allCrops) => setCrops([{id: null, name: "none"}, ...allCrops]));
 
-    const getAllCrops = async () => {
-      try {
-        const response = await axios.get('http://localhost:3000/api/crops/getAll');
-        setCrops([{id: null, name: "none"}, ...response.data.data.crops]);
-      }
-      catch (error) {
-        console.error(error);
-      }
-    }
+    if (year === 0) setYear(new Date().getFullYear());
 
     const getYears = () => {
       const currentYear = year || new Date().getFullYear();
@@ -173,7 +167,6 @@ export default function MyFields() {
     getYears();
     getAllFields();
     getAllCurrentGrows();
-    getAllCrops();
     setLoading(false);
   }, []);
 
@@ -325,16 +318,7 @@ export default function MyFields() {
           </View>
         </View>
       </Modal>
-      <Modal 
-        isVisible={loading}
-        animationIn="slideInUp"
-        backdropColor={'#78350f'}
-        backdropOpacity={0.50}
-      >
-        <View className="flex place-content-center h-screen items-center">
-          <ActivityIndicator size="large" color="#fef3c6" />
-        </View>
-      </Modal>
+      <LoadingModal loading={loading} />
     </View>
   );
 }
