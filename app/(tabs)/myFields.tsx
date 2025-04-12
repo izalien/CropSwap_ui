@@ -7,6 +7,8 @@ import { Dropdown } from "react-native-element-dropdown";
 import axios from "axios";
 import { getCrops } from "../utils/crops";
 import LoadingModal from "../components/LoadingModal";
+import BrownButton from "../components/BrownButton";
+import Background from "../components/Background";
 
 export default function MyFields() {
   const [grows, setGrows] = useState(new Array<Grow>());
@@ -176,73 +178,73 @@ export default function MyFields() {
   }, [year]);
 
   return (
-    <View className="h-full p-10 bg bg-amber-900/75 flex items-center">
+    <Background>
       <Text className="color-amber-50 text-7xl m-5 font-serif">{year} Fields</Text>
-      <View className="flex-row items-center">
-        <Text className="color-amber-100 text-xl m-3">Select year:</Text>
-        <Dropdown value={year} labelField={"value"} valueField={"value"} data={years} style={{ borderColor: '#78350f', borderWidth: 2, padding: 8, borderRadius: 6, backgroundColor: '#fffbeb'}} itemTextStyle={{fontSize: 14}} selectedTextStyle={{fontSize: 14}} onChange={event => setYear(event.value)}/>   
+      <View className="h-full">
+        <View className="flex-row h-10 align-middle">
+          <Text className="color-amber-100 text-xl m-3">Select year:</Text>
+          <Dropdown value={year} labelField={"value"} valueField={"value"} data={years} style={{ borderColor: '#78350f', borderWidth: 2, padding: 8, borderRadius: 6, backgroundColor: '#fffbeb'}} itemTextStyle={{fontSize: 14}} selectedTextStyle={{fontSize: 14}} onChange={event => setYear(event.value)}/>   
+        </View>
+        {showRemove && 
+          <Text className="color-amber-50 text-3xl">Select fields for removal</Text>
+        }
+        {grows.length === 0 ? (
+          <Text className="color-amber-50 text-3xl">No fields found.</Text>
+        ) : (
+        <FlatList
+          numColumns={3}
+          data={grows}
+          renderItem={({item, index}) => (
+            <View className="bg-amber-100 p-5 m-5 rounded-xl">
+              <View className="flex-row items-center">
+                {showRemove && 
+                  <CheckBox
+                    checked={checkedFields[index]}
+                    onPress={() => {toggleCheckbox(index)}}
+                    iconType="material-community"
+                    checkedIcon="checkbox-marked"
+                    uncheckedIcon="checkbox-blank-outline"
+                    checkedColor='#3c6300'
+                    size={32}
+                    containerStyle={{padding: 0, marginTop: 0, marginLeft: 0, marginRight: 0, paddingBottom: 3}}
+                  />
+                }
+                <Text className="color-amber-950 text-3xl font-serif font-semibold mb-2">{item.field.name.toUpperCase()}</Text>
+              </View>
+              <View className="flex-row w-full justify-between">
+                <Text className="color-amber-900 text-xl font-semibold me-5">Size:</Text>
+                <Text className="color-amber-900 text-xl">{item.field.size} acres</Text>
+              </View>
+              <View className="flex-row w-full justify-between">
+                <Text className="color-amber-900 text-xl font-semibold me-5">Location:</Text>
+                <Text className="color-amber-900 text-xl">{item.field.location}</Text>
+              </View>
+              <View className="flex-row w-full justify-between">
+                <Text className="color-amber-900 text-xl font-semibold me-5">Crop:</Text>
+                <Text className="color-amber-900 text-xl">{item.crop.name}</Text>
+              </View>
+            </View>
+          )}
+          keyExtractor={(item) => item._id}
+        />)}
       </View>
-      {showRemove && 
-        <Text className="color-amber-50 text-3xl">Select fields for removal</Text>
-      }
-      {grows.length === 0 ? (
-        <Text className="color-amber-50 text-3xl">No fields found.</Text>
-      ) : (
-      <FlatList
-        numColumns={3}
-        data={grows}
-        renderItem={({item, index}) => (
-          <View className="bg-amber-100 p-5 m-5 rounded-xl">
-            <View className="flex-row items-center">
-              {showRemove && 
-                <CheckBox
-                  checked={checkedFields[index]}
-                  onPress={() => {toggleCheckbox(index)}}
-                  iconType="material-community"
-                  checkedIcon="checkbox-marked"
-                  uncheckedIcon="checkbox-blank-outline"
-                  checkedColor='#3c6300'
-                  size={32}
-                  containerStyle={{padding: 0, marginTop: 0, marginLeft: 0, marginRight: 0, paddingBottom: 3}}
-                />
-              }
-              <Text className="color-amber-950 text-3xl font-serif font-semibold mb-2">{item.field.name.toUpperCase()}</Text>
-            </View>
-            <View className="flex-row w-full justify-between">
-              <Text className="color-amber-900 text-xl font-semibold me-5">Size:</Text>
-              <Text className="color-amber-900 text-xl">{item.field.size} acres</Text>
-            </View>
-            <View className="flex-row w-full justify-between">
-              <Text className="color-amber-900 text-xl font-semibold me-5">Location:</Text>
-              <Text className="color-amber-900 text-xl">{item.field.location}</Text>
-            </View>
-            <View className="flex-row w-full justify-between">
-              <Text className="color-amber-900 text-xl font-semibold me-5">Crop:</Text>
-              <Text className="color-amber-900 text-xl">{item.crop.name}</Text>
-            </View>
-          </View>
-        )}
-        keyExtractor={(item) => item._id}
-      />)}
       {showRemove ?  
-        <View className="bg-amber-100 absolute inset-x-0 bottom-0 p-5 flex-row justify-center">
-          <View className="mx-5">
-            <Button title="Remove Selected" onPress={() => {removeFields()}} color={'#3c6300'}/>
-          </View>
+        <View className="bg-lime-900 sticky bottom-0 p-5 flex-row justify-center w-full">
+          <BrownButton onPress={() => {removeFields()}} title="Remove Selected"/>
           <View className="mx-5">
             <Button title="Cancel" onPress={() => {setShowRemove(false)}} color={'#9f0712'}/>
           </View>
         </View>
         :
-        <View className="bg-amber-100 absolute inset-x-0 bottom-0 p-5 flex-row justify-center">
+        <View className="bg-lime-800 sticky bottom-0 p-5 flex-row justify-center w-full">
           <View className="w-40 mx-5">
-            <Button title="Add Existing Field" onPress={() => {getAllNonCurrentFields()}} color={'#78350f'}/>
+            <BrownButton title="Add Existing Field" onPress={() => {getAllNonCurrentFields()}}/>
           </View>
           <View className="w-40 mx-5">
-            <Button title="Add New Field" onPress={() => {setNewFieldModalVisible(true)}} color={'#78350f'}/>
+            <BrownButton title="Add New Field" onPress={() => {setNewFieldModalVisible(true)}}/>
           </View>
           <View className="w-40 mx-5">
-            <Button title="Remove Field" onPress={() => {setShowRemove(true)}} color={'#78350f'}/>
+            <BrownButton title="Remove Field" onPress={() => setShowRemove(true)}/>
           </View>
         </View>
       }
@@ -319,6 +321,6 @@ export default function MyFields() {
         </View>
       </Modal>
       <LoadingModal loading={loading} />
-    </View>
+    </Background>
   );
 }
