@@ -1,8 +1,8 @@
 # CropSwap
 
-This is the ui portion WORK IN PROGRESS revamp of my old capstone project. In the program's current state users' can add new and existing fields to their current growing season. Additonally, they can remove fields from a growing season.
+This is the ui portion, WORK IN PROGRESS, revamp of my old capstone project. Users can add new and existing fields to current and past seasons and view crop history. Additionally, they can remove fields from a growing season.
 
-This ui is the React Native front end for an Express.js program. This program's intent is to assist farmers with crop management.
+This ui is the React Native front end for an Express.js program. This program intends to assist farmers with crop management.
 
 Technologies Used: 
 - React Native,
@@ -11,8 +11,10 @@ Technologies Used:
 
 
 Screenshots: 
-![image](https://github.com/user-attachments/assets/515d1021-a69a-4503-8fb1-9120d8e40f6c)
-![image](https://github.com/user-attachments/assets/772d09ed-7ecd-4275-b695-12a80ba33d66)
-![image](https://github.com/user-attachments/assets/0141d23a-572a-4380-b6db-da43f4020187)
-![image](https://github.com/user-attachments/assets/160ec599-37e6-4b24-9c3c-d61693fdc9e5)
-![image](https://github.com/user-attachments/assets/7ca2ea03-15a5-4c8f-b254-d17b3f5cf5a3)
+![image](https://github.com/user-attachments/assets/e38f7186-0086-4492-808d-f2a8f3cd427e)
+![image](https://github.com/user-attachments/assets/9d8bda2c-30b5-4d52-9210-71f7b892a5e4)
+![image](https://github.com/user-attachments/assets/32a072b0-48bb-4e84-9819-d3220cd9c798)
+![image](https://github.com/user-attachments/assets/55d3e662-bc38-47f7-948e-6bd4d9234722)
+![image](https://github.com/user-attachments/assets/72eb7015-044b-4b6a-8cb2-0cbba855385b)
+![image](https://github.com/user-attachments/assets/0f77f554-6f92-473f-a8a3-2274737abf1f)
+
