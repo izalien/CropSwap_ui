@@ -9,6 +9,7 @@ import { getCrops } from "../utils/crops";
 import LoadingModal from "../components/LoadingModal";
 import BrownButton from "../components/BrownButton";
 import Background from "../components/Background";
+import Title from "../components/Title";
 
 export default function MyFields() {
   const [grows, setGrows] = useState(new Array<Grow>());
@@ -179,7 +180,7 @@ export default function MyFields() {
 
   return (
     <Background>
-      <Text className="color-amber-50 text-7xl m-5 font-serif">{year} Fields</Text>
+      <Title>{year} Fields</Title>
       <View className="h-full">
         <View className="flex-row h-10 align-middle">
           <Text className="color-amber-100 text-xl m-3">Select year:</Text>

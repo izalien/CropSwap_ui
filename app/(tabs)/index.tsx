@@ -2,13 +2,14 @@ import {Text, TouchableOpacity, View } from "react-native";
 import React from "react";
 import { useNavigation } from '@react-navigation/native';
 import Background from "../components/Background";
+import Title from "../components/Title";
 
 export default function Index() {
   const navigation = useNavigation();
   return (
     <Background>
         <View className="backdrop-blur-sm flex items-center justify-center p-20 rounded-xl">
-          <Text className="text-amber-50 text-7xl m-5 font-serif">Welcome to CropSwap</Text>
+          <Title>Welcome to CropSwap</Title>
           <Text className="text-amber-100 text-5xl m-5 font-serif">manage your crops' past, present, and future</Text>
         </View>
         <View className="flex-row w-full justify-center">

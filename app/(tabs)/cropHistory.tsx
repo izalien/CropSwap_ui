@@ -5,6 +5,7 @@ import axios from "axios";
 import LoadingModal from "../components/LoadingModal";
 import { FlatList } from "react-native-gesture-handler";
 import Background from "../components/Background";
+import Title from "../components/Title";
 
 export default function CropHistory() {
     const [loading, setLoading] = useState(true);
@@ -74,13 +75,13 @@ export default function CropHistory() {
 
     return(
         <Background>
-            <Text className="color-amber-50 text-7xl m-5 font-serif">Crop History</Text>
+            <Title>Crop History</Title>
             <View className="h-min">
                 <FlatList 
                     data={data.headers}
                     horizontal={true}
                     renderItem={({item}) => ( 
-                        <View className="bg-amber-900 border border-amber-950 w-32 justify-end">
+                        <View className="bg-amber-900/75 backdrop-blur-sm border border-amber-950 w-32 justify-end">
                             <Text className="text-base p-2 color-amber-100">{item}</Text> 
                         </View>
                     )}
@@ -98,7 +99,7 @@ export default function CropHistory() {
                                 <View>
                                     {
                                         (index % 4 === 0 || (index + 1) % 4 === 0) ?
-                                            <Text className="bg-amber-100/50 color-amber-950 p-2 text-base w-32 text-center px-5 border border-amber-950">{item}</Text>
+                                            <Text className="bg-amber-100/50  backdrop-blur-sm color-amber-950 p-2 text-base w-32 text-center px-5 border border-amber-950">{item}</Text>
                                         :
                                         <Text className="bg-amber-100 color-amber-950 p-2 text-base w-32 text-center px-5 border border-amber-950">{item}</Text>
                                     }
@@ -109,28 +110,6 @@ export default function CropHistory() {
                     className="border-b-2 border-x-2 rounded-b-2xl border-amber-950"
                 />
             </View>
-            {/* <Table 
-                style={{width: '66%', marginTop: '2%', borderTopLeftRadius: 15, borderTopRightRadius: 15,}} 
-                borderStyle={{ borderColor: '#461901', borderWidth: 2}}
-            >
-                <Row 
-                    data={data.headers} 
-                    textStyle={{fontSize: 16, color: '#fffbeb', fontWeight: 600, paddingHorizontal: '2%', margin: 8}} 
-                    style={{backgroundColor: '#7b3306', borderTopLeftRadius: 15, borderTopRightRadius: 15, borderColor: '#461901', borderWidth: 2}}
-                />
-                    {data.data.map((row, rowIndex) => (
-                        <TableWrapper key={rowIndex} style={{flexDirection: "row"}}>
-                            {row.map((cell: number, cellIndex: number) => (
-                                <Cell 
-                                    key={cellIndex} 
-                                    data={cell} 
-                                    textStyle={{color: '#461901', textAlign: 'center', fontSize: 14, margin: 5}}
-                                    style={{backgroundColor: cellIndex % 4 === 0 || (cellIndex + 1) % 4 === 0 ? '#fef3c6' : '#fffbeb', width: `${1 / row.length * 100}%`}}
-                                />
-                            ))}
-                        </TableWrapper>
-                    ))}
-            </Table> */}
             <LoadingModal loading={loading}></LoadingModal>
         </Background>
     );
