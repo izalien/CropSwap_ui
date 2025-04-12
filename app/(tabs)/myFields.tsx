@@ -188,7 +188,7 @@ export default function MyFields() {
           <Dropdown value={year} labelField={"value"} valueField={"value"} data={years} style={{ borderColor: '#78350f', borderWidth: 2, padding: 8, borderRadius: 6, backgroundColor: '#fffbeb' }} itemTextStyle={{ fontSize: 14 }} selectedTextStyle={{ fontSize: 14 }} onChange={event => setYear(event.value)} />
         </View>
         {showRemove &&
-          <Text className="color-amber-50 text-3xl">Select fields for removal</Text>
+          <Text className="color-amber-50 text-3xl text-center">Select fields for removal</Text>
         }
         {grows.length === 0 ? (
           <Text className="color-amber-50 text-3xl">No fields found.</Text>
