@@ -99,7 +99,7 @@ export default function CropHistory() {
                                 <View>
                                     {
                                         (index % 4 === 0 || (index + 1) % 4 === 0) ?
-                                            <Text className="bg-amber-100/50  backdrop-blur-sm color-amber-950 p-2 text-base w-32 text-center px-5 border border-amber-950">{item}</Text>
+                                            <Text className="bg-amber-100/75 backdrop-blur-sm color-amber-950 p-2 text-base w-32 text-center px-5 border border-amber-950">{item}</Text>
                                         :
                                         <Text className="bg-amber-100 color-amber-950 p-2 text-base w-32 text-center px-5 border border-amber-950">{item}</Text>
                                     }
@@ -107,7 +107,7 @@ export default function CropHistory() {
                             )}
                         />
                     )}
-                    className="border-b-2 border-x-2 rounded-b-2xl border-amber-950"
+                    className="border-b-2 border-x-2 rounded-b-2xl border-amber-950 bg-lime-900"
                 />
             </View>
             <LoadingModal loading={loading}></LoadingModal>
