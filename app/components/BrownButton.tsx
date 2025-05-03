@@ -7,7 +7,7 @@ interface BrowButtonProps {
     readonly className?: string;
 }
 
-export default function LoadingModal({ onPress, title, className }: BrowButtonProps) {
+export default function BrownButton({ onPress, title, className }: BrowButtonProps) {
     return (
         <View className={className ? "w-40 mx-5 " + className : "w-40 mx-5"}>
             <Button title={title} onPress={onPress} color={'#78350f'}/>
