@@ -108,44 +108,6 @@ export default function CropHistory() {
                     className="rounded-xl bg-amber-900 shadow-xl"
                 />
             </View>
-            {/* <View className="h-min w-2/3">
-                <FlatList 
-                    data={data.headers}
-                    horizontal={true}
-                    renderItem={({item}) => ( 
-                        <View className="bg-amber-900/75 backdrop-blur-sm border border-amber-950 justify-end">
-                            <Text className="text-base p-2 color-amber-100">{item}</Text> 
-                        </View>
-                    )}
-                    className="mt-12 border-t-2 border-x-2 rounded-t-2xl border-amber-950"
-                />
-            </View> */}
-            {/* <View className="h-min w-2/3">
-                <FlatList 
-                    data={data.data}
-                    renderItem={({item}) => ( 
-                        <FlatList 
-                            data={[...item]}
-                            horizontal={true}
-                            renderItem={({item, index}) => (
-                                <View>
-                                    {
-                                        // if last column add view link
-                                        (index === data.headers.length - 2) ?
-                                            <View className="inline-block">
-                                                <Text className={getClassNames(index)}>{item}</Text>
-                                                <Link href={{ pathname: '/(tabs)/myFields?yearProp=2024'}} className={getClassNames(index + 1, true)}>View</Link>
-                                            </View>
-                                        :
-                                        <Text className={getClassNames(index)}>{item}</Text>
-                                    }
-                                </View>
-                            )}
-                        />
-                    )}
-                    className="border-b-2 border-x-2 rounded-b-2xl border-amber-950"
-                />
-            </View> */}
             <LoadingModal loading={loading}></LoadingModal>
         </Background>
     );
