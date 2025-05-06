@@ -109,7 +109,7 @@ export default function CropHistory() {
                                 ))}
                                 {index != 0 &&
                                     <View className={getCellContainerClassNames(item.length, true)}>
-                                        <Link className={getCellContentClassNames()} href={{ pathname: '/(tabs)/myFields?yearProp=2024'}}>View</Link>
+                                        <Link className={getCellContentClassNames()} href={`/(tabs)/myFields?yearParam=${item[0]}`}>View</Link>
                                     </View>
                                 }
                             </View>
