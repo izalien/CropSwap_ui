@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Text, View } from 'react-native';
+import { View, Text } from 'react-native';
 import { getCrops } from "../utils/crops";
 import axios from "axios";
 import LoadingModal from "../components/LoadingModal";
@@ -7,7 +7,6 @@ import { FlatList } from "react-native-gesture-handler";
 import Background from "../components/Background";
 import Title from "../components/Title";
 import { Link } from "expo-router";
-import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry";
 
 export default function CropHistory() {
     const [loading, setLoading] = useState(true);
@@ -16,7 +15,7 @@ export default function CropHistory() {
     useEffect(() => {
 
         const getCropTotals = (grows: Grow[], season: number, crop: string) => {
-            const results = grows.filter((grow: Grow) => { return grow.season === season && grow.crop.name === crop.toLowerCase();});
+            const results = grows.filter((grow: Grow) => grow.season === season && grow.crop.name === crop.toLowerCase());
             let acres = 0; 
             results.forEach((result) => acres += result.field.size);
             return [results.length, acres];
@@ -74,17 +73,23 @@ export default function CropHistory() {
         setLoading(false);
     }, []);
 
-    const getCellClassNames = (index: number, view?: boolean, rowOne?: number) => {
-        let classes = index === data[0].length - 1 ? `p-2 text-base w-1/${data[0].length}` : `p-2 text-base w-1/${data[0].length} border-r-2 border-amber-950`;
+    const getCellContentClassNames = (rowOne?: number) => {
         if (rowOne === 0)
-            return `${classes} color-amber-100 justify-end`
+            return `text-base color-amber-100 justify-end`;
+        return `color-amber-950 text-center`;
+    }
+
+    const getCellContainerClassNames = (index: number, view?: boolean, rowOne?: number) => {
+        let classes = index === data[0].length - 1 ? `p-2 w-1/${data[0].length} min-w-[90px]` : `p-2 border-r-2 border-amber-950 w-1/${data[0].length} min-w-[90px]`;
+        if (rowOne === 0)
+            return `${classes} justify-end`;
         else if ((index % 4 === 0 || (index + 1) % 4 === 0) && view) 
-            return `${classes} bg-amber-100/50 hover:bg-lime-100/75 backdrop-blur-sm color-amber-950 text-center px-5 border-t-2 underline`;
+            return `${classes} bg-amber-100/50 hover:bg-lime-100/75 backdrop-blur-sm px-5 border-t-2 underline`;
         else if (index % 4 === 0 || (index + 1) % 4 === 0)
-            return `${classes} bg-amber-100/50 backdrop-blur-sm color-amber-950 text-center px-5 border-t-2`;
+            return `${classes} bg-amber-100/50 backdrop-blur-sm px-5 border-t-2`;
         else if (view)
-            return `${classes} bg-amber-100 hover:bg-lime-100/75 color-amber-950 text-center px-5 border-t-2`;
-        return `${classes} bg-amber-100 color-amber-950 text-center px-5 border-t-2`;
+            return `${classes} bg-amber-100 hover:bg-lime-100/75 px-5 border-t-2`;
+        return `${classes} bg-amber-100 px-5 border-t-2`;
     }
 
     return(
@@ -93,14 +98,18 @@ export default function CropHistory() {
             <View className="h-min w-2/3">
                 <FlatList
                     data={data}
+                    horizontal={true}
+                    contentContainerStyle={{ flexDirection: 'column' }}
                     renderItem={({item, index}) => (
-                            <View key={index} className="flex-row">
+                            <View key={index} className="flex-row w-min">
                                 {item.map((cell: any, cellIndex: number) => (
-                                    <View key={cellIndex} className={getCellClassNames(cellIndex, false, index)}>{cell}</View>
+                                    <View key={cellIndex} className={getCellContainerClassNames(cellIndex, false, index)}>
+                                        <Text className={getCellContentClassNames(index)}>{cell}</Text>
+                                    </View>
                                 ))}
                                 {index != 0 &&
-                                    <View className={getCellClassNames(item.length, true)}>
-                                        <Link href={{ pathname: '/(tabs)/myFields?yearProp=2024'}}>View</Link>
+                                    <View className={getCellContainerClassNames(item.length, true)}>
+                                        <Link className={getCellContentClassNames()} href={{ pathname: '/(tabs)/myFields?yearProp=2024'}}>View</Link>
                                     </View>
                                 }
                             </View>
