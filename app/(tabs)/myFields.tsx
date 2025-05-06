@@ -1,4 +1,4 @@
-import { Button, Text, View } from "react-native";
+import { Button, ScrollView, Text, View } from "react-native";
 import { CheckBox } from 'react-native-elements'
 import Modal from "react-native-modal"
 import React, { useEffect, useState } from "react";
@@ -10,6 +10,7 @@ import LoadingModal from "../components/LoadingModal";
 import BrownButton from "../components/BrownButton";
 import Background from "../components/Background";
 import Title from "../components/Title";
+import { useGlobalSearchParams, router } from "expo-router";
 import CSModal from "../components/CSModal";
 
 export default function MyFields() {
@@ -158,10 +159,10 @@ export default function MyFields() {
   useEffect(() => {
     getCrops().then((allCrops) => setCrops([{ id: null, name: "none" }, ...allCrops]));
 
-    if (year === 0) setYear(new Date().getFullYear());
+    if (year === 0) router.setParams({ year: new Date().getFullYear()});
 
     const getYears = () => {
-      const currentYear = year || new Date().getFullYear();
+      const currentYear = new Date().getFullYear();
       const tempYears = Array.from({ length: currentYear - 1900 + 1 }, (_, index) => ({
         "value": currentYear - index
       }));
