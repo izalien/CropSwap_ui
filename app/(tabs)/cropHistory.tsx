@@ -80,7 +80,10 @@ export default function CropHistory() {
     }
 
     const getCellContainerClassNames = (index: number, view?: boolean, rowOne?: number) => {
-        let classes = index === data[0].length - 1 ? `p-2 w-1/${data[0].length} min-w-[90px]` : `p-2 border-r-2 border-amber-950 w-1/${data[0].length} min-w-[90px]`;
+        const length = data[0].length.toString();
+        let classes = index === length - 1 
+            ? `p-2 w-[90px]` 
+            : `p-2 border-r-2 border-amber-950 w-[90px]`;
         if (rowOne === 0)
             return `${classes} justify-end`;
         else if ((index % 4 === 0 || (index + 1) % 4 === 0) && view) 
@@ -99,9 +102,9 @@ export default function CropHistory() {
                 <FlatList
                     data={data}
                     horizontal={true}
-                    contentContainerStyle={{ flexDirection: 'column' }}
+                    contentContainerStyle={{ flexDirection: 'column'}}
                     renderItem={({item, index}) => (
-                            <View key={index} className="flex-row w-min">
+                            <View key={index} className="flex-row">
                                 {item.map((cell: any, cellIndex: number) => (
                                     <View key={cellIndex} className={getCellContainerClassNames(cellIndex, false, index)}>
                                         <Text className={getCellContentClassNames(index)}>{cell}</Text>
