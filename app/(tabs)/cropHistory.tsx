@@ -95,14 +95,31 @@ export default function CropHistory() {
         return `${classes} bg-amber-100 px-5 border-t-2`;
     }
 
+    // may implement in the future
+    // const handleScroll = (event: any) => {
+    //     const { contentOffset, layoutMeasurement, contentSize } = event.nativeEvent;
+    //     const scrollX = contentOffset.x;
+    //     const contentWidth = contentSize.width;
+    //     const containerWidth = layoutMeasurement.width;
+
+    //     // setShowLeftShadow(scrollX > 0); // Show left shadow if scrolled right
+    //     // setShowRightShadow(scrollX < contentWidth - containerWidth);
+
+    //     const flatList = document.querySelector('FlatList');
+
+    //     if (scrollX > 0 && flatList) 
+    //         flatList.className = "rounded-xl bg-grandient-to-r from-amber-100 to-transparent";
+    // }
+
     return(
         <Background>
             <Title>Crop History</Title>
-            <View className="h-min w-2/3">
+            <View className={`rounded-xl h-min w-2/3 bg-amber-900 shadow-xl max-w-[1080px]`}>
                 <FlatList
                     data={data}
                     horizontal={true}
                     contentContainerStyle={{ flexDirection: 'column'}}
+                    onScroll={(event) => { handleScroll(event) }}
                     renderItem={({item, index}) => (
                             <View key={index} className="flex-row">
                                 {item.map((cell: any, cellIndex: number) => (
@@ -117,7 +134,7 @@ export default function CropHistory() {
                                 }
                             </View>
                     )}
-                    className="rounded-xl bg-amber-900 shadow-xl"
+                    className="rounded-xl"
                 />
             </View>
             <LoadingModal loading={loading}></LoadingModal>
