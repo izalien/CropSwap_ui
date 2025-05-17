@@ -119,7 +119,7 @@ export default function CropHistory() {
                     data={data}
                     horizontal={true}
                     contentContainerStyle={{ flexDirection: 'column'}}
-                    onScroll={(event) => { handleScroll(event) }}
+                    //onScroll={(event) => { handleScroll(event) }}
                     renderItem={({item, index}) => (
                             <View key={index} className="flex-row">
                                 {item.map((cell: any, cellIndex: number) => (
